@@ -31,6 +31,11 @@
 	addi $a1, $zero, 25 # c: coluna
 	jal gerarTronco
 	
+	lui $s0, 0x1001	   # início do endereço de memória
+	addi $t2, $zero, 6 # l: linha
+	addi $a1, $zero, 2 # c: coluna
+	jal gerarPersonagem
+	
 	addi $2, $zero, 10 # >>> ENDPROGRAM <<<
 	syscall
 	
@@ -63,4 +68,32 @@
 				
 				j for_gT
 			
-		EXIT_gerarCenario: jr $31
+	EXIT_gerarCenario: jr $31
+
+	gerarPersonagem:
+		
+		add $t6, $zero, $zero # reseta $t6
+		
+		# &pX = &p0 + (l * L + c) * 4
+		mul $t6, $t2, $s1
+		add $t6, $t6, $a1
+		sll $t6, $t6, 2
+		add $t6, $t6, $s0
+		
+		HEAD:
+			addi $t1, $zero, 0xE4706F # cor da Cabeça
+			sw $t1, 0($t6)
+		SHIRT:
+			addi $t1, $zero, 0x5BBB5C # cor da Camisa
+			addi $t6, $t6, 128
+			sw $t1, 0($t6)
+			addi $t6, $t6, 4
+			sw $t1, 0($t6)
+		PANTS:
+			addi $t1, $zero, 0x356018 # cor da Calça
+			addi $t6, $t6, 124
+			sw $t1, 0($t6)
+			addi $t6, $t6, 128
+			sw $t1, 0($t6)
+		
+	EXIT_gerarPersonagem: jr $31
