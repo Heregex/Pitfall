@@ -5,6 +5,7 @@
 	
 	add $t0, $zero, $zero     # iterador
 	
+	# __________ CENÁRIO __________ #
 	addi $t1, $zero, 0x345C1C # cor da Copa
 	addi $a1, $zero, 1536     # UG limite
 	jal gerarCenario
@@ -18,25 +19,35 @@
 	addi $a1, $zero, 6144     # UG limite
 	jal gerarCenario
 	
+	# __________ TRONCOS __________ #
 	lui $s0, 0x1001           # início do endereço de memória
-	addi $t2, $zero, 12       # l: linha
+	addi $a2, $zero, 12       # l: linha
 	addi $t1, $zero, 0x444400 # cor do Tronco
 	
 	addi $a1, $zero, 24  # c: coluna
 	jal gerarTronco
-	addi $a1, $zero, 52  # c: coluna
+	addi $a1, $zero, 44  # c: coluna
 	jal gerarTronco
-	addi $a1, $zero, 72  # c: coluna
+	addi $a1, $zero, 80  # c: coluna
 	jal gerarTronco
 	addi $a1, $zero, 100 # c: coluna
 	jal gerarTronco
-	
+
+	# __________ LAGO __________ #	
+	lui $s0, 0x1001           # início do endereço de memória
+	addi $a2, $zero, 33       # l: linha
+	addi $a1, $zero, 52	  # c: coluna
+	addi $t1, $zero, 0x386890 # cor do Lago
+	jal gerarLago
+
+	# __________ PERSONAGEM __________ #		
 	lui $s0, 0x1001	    # início do endereço de memória
-	addi $t2, $zero, 24 # l: linha
+	addi $a2, $zero, 24 # l: linha
 	addi $a1, $zero, 8  # c: coluna
 	jal gerarPersonagem
 	
-	addi $2, $zero, 10 # >>> ENDPROGRAM <<<
+	# __________ >>> ENDPROGRAM <<< __________ #
+	addi $2, $zero, 10
 	syscall
 	
 	gerarCenario:
@@ -54,7 +65,7 @@
 			add $t0, $zero, $zero # reseta iterador
 				
 			# &pX = &p0 + (l * L + c) * 4
-			mul $t6, $t2, $s1
+			mul $t6, $a2, $s1
 			add $t6, $t6, $a1
 			sll $t6, $t6, 2
 			add $t6, $t6, $s0
@@ -73,12 +84,18 @@
 			
 	EXIT_gerarCenario: jr $31
 
+	gerarLago:
+		# CHECKPOINT!
+		
+		
+	EXIT_gerarLago: jr $31
+
 	gerarPersonagem:
 		
 		add $t6, $zero, $zero # reseta $t6
 		
 		# &pX = &p0 + (l * L + c) * 4
-		mul $t6, $t2, $s1
+		mul $t6, $a2, $s1
 		add $t6, $t6, $a1
 		sll $t6, $t6, 2
 		add $t6, $t6, $s0
