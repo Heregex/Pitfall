@@ -1,9 +1,9 @@
 .text
 .main:
-	lui $s0, 0x1001           # início do endereço de memória
-	addi $s1, $zero, 128      # L: quantidade de UG na linha
+	lui $s0, 0x1001       # início do endereço de memória
+	addi $s1, $zero, 128  # L: quantidade de UG na linha
 	
-	add $t0, $zero, $zero     # iterador
+	add $t0, $zero, $zero # iterador global
 	
 	# __________ CENÁRIO __________ #
 	addi $t1, $zero, 0x345C1C # cor da Copa
@@ -33,17 +33,39 @@
 	addi $a1, $zero, 100 # c: coluna
 	jal gerarTronco
 
-	# __________ LAGO __________ #	
-	lui $s0, 0x1001           # início do endereço de memória
-	addi $a2, $zero, 33       # l: linha
-	addi $a1, $zero, 52	  # c: coluna
+	# __________ LAGO __________ #
 	addi $t1, $zero, 0x386890 # cor do Lago
+	addi $a1, $zero, 52	  # c: coluna
+	addi $a2, $zero, 33       # l: linha
+	addi $a3, $zero, 24	  # Quantidade de UG do lago na linha
 	jal gerarLago
-
-	# __________ PERSONAGEM __________ #		
-	lui $s0, 0x1001	    # início do endereço de memória
-	addi $a2, $zero, 24 # l: linha
+	addi $a1, $zero, 48	  # c: coluna
+	addi $a2, $zero, 34       # l: linha
+	addi $a3, $zero, 32	  # Quantidade de UG do lago na linha
+	jal gerarLago
+	addi $a1, $zero, 44	  # c: coluna
+	addi $a2, $zero, 35       # l: linha
+	addi $a3, $zero, 40	  # Quantidade de UG do lago na linha
+	jal gerarLago
+	addi $a1, $zero, 44	  # c: coluna
+	addi $a2, $zero, 36       # l: linha
+	addi $a3, $zero, 40	  # Quantidade de UG do lago na linha
+	jal gerarLago
+	addi $a1, $zero, 48	  # c: coluna
+	addi $a2, $zero, 37       # l: linha
+	addi $a3, $zero, 32	  # Quantidade de UG do lago na linha
+	jal gerarLago
+	addi $t1, $zero, 0x386890 # cor do Lago
+	addi $a1, $zero, 52	  # c: coluna
+	addi $a2, $zero, 38       # l: linha
+	addi $a3, $zero, 24	  # Quantidade de UG do lago na linha
+	jal gerarLago
+	
+	# CHECKPOINT!
+	
+	# __________ PERSONAGEM __________ #
 	addi $a1, $zero, 8  # c: coluna
+	addi $a2, $zero, 24 # l: linha
 	jal gerarPersonagem
 	
 	# __________ >>> ENDPROGRAM <<< __________ #
@@ -85,8 +107,25 @@
 	EXIT_gerarCenario: jr $31
 
 	gerarLago:
-		# CHECKPOINT!
 		
+		add $t0, $zero, $zero # reseta iterador
+		
+		# &pX = &p0 + (l * L + c) * 4
+		mul $t6, $a2, $s1
+		add $t6, $t6, $a1
+		sll $t6, $t6, 2
+		add $t6, $t6, $s0
+		
+		for_gL: beq $t0, $a3, EXIT_for_gL
+			
+			sw $t1, 0($t6)
+			
+			addi $t6, $t6, 4
+			addi $t0, $t0, 1 # incremento
+			j for_gL
+		
+		EXIT_for_gL:
+			
 		
 	EXIT_gerarLago: jr $31
 
