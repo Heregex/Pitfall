@@ -51,7 +51,7 @@
 			j for_gC
 			
 		gerarTronco:
-			add $t5, $zero, $zero # iterador
+			add $t0, $zero, $zero # reseta iterador
 				
 			# &pX = &p0 + (l * L + c) * 4
 			mul $t6, $t2, $s1
@@ -59,14 +59,14 @@
 			sll $t6, $t6, 2
 			add $t6, $t6, $s0
 			
-			for_gT: beq $t5, 20, EXIT_gerarCenario # pinta 20 UG de Tronco
+			for_gT: beq $t0, 20, EXIT_gerarCenario # pinta 20 UG de Tronco
 				# espessura do tronco: 4 UG
 				sw $t1, 0($t6)
 				sw $t1, 4($t6)
 				sw $t1, 8($t6)
 				sw $t1, 12($t6)
 			
-				addi $t5, $t5, 1 # incremento
+				addi $t0, $t0, 1 # incremento
 				addi $t6, $t6, 512
 				
 				j for_gT
