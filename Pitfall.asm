@@ -61,7 +61,11 @@
 	addi $a3, $zero, 24	  # Quantidade de UG do lago na linha
 	jal gerarLago
 	
-	# CHECKPOINT!
+	# __________ ESCORPIÃO __________ #
+	addi $t1, $zero, 0xF4F4F4 # cor do Escorpião
+	addi $a1, $zero, 11       # c: coluna
+	addi $a2, $zero, 55	  # l: linha
+	jal gerarEscorpiao
 	
 	# __________ PERSONAGEM __________ #
 	addi $a1, $zero, 8  # c: coluna
@@ -128,6 +132,62 @@
 			
 		
 	EXIT_gerarLago: jr $31
+
+	gerarEscorpiao:
+	
+		add $t0, $zero, $zero # reseta iterador
+				
+		# &pX = &p0 + (l * L + c) * 4
+		mul $t6, $a2, $s1
+		add $t6, $t6, $a1
+		sll $t6, $t6, 2
+		add $t6, $t6, $s0
+		
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 8($t6)
+		addi $t6, $t6, 508
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		sw $t1, 20($t6)
+		addi $t6, $t6, 512
+		sw $t1, 0($t6)
+		sw $t1, 20($t6)
+		addi $t6, $t6, 504
+		sw $t1, 0($t6)
+		sw $t1, 12($t6)
+		sw $t1, 28($t6)
+		addi $t6, $t6, 512
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 24($t6)
+		sw $t1, 28($t6)
+		addi $t6, $t6, 520
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 8($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		addi $t6, $t6, 500
+		sw $t1, 0($t6)
+		sw $t1, 8($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		sw $t1, 20($t6)
+		sw $t1, 24($t6)
+		addi $t6, $t6, 516
+		sw $t1, 0($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		sw $t1, 20($t6)
+		addi $t6, $t6, 508
+		sw $t1, 0($t6)
+		sw $t1, 8($t6)
+		sw $t1, 32($t6)
+		
+	EXIT_gerarEscorpiao: jr $31
 
 	gerarPersonagem:
 		
