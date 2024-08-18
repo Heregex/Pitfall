@@ -61,6 +61,12 @@
 	addi $a3, $zero, 24	  # Quantidade de UG do lago na linha
 	jal gerarLago
 	
+	# __________ CROCODILO __________ #
+	addi $t1, $zero, 0x143800 # cor do Crocodilo
+	addi $a1, $zero, 66 	  # c: coluna
+	addi $a2, $zero, 34	  # l: linha
+	jal gerarCrocodilo
+	
 	# __________ ESCORPIÃO __________ #
 	addi $t1, $zero, 0xF4F4F4 # cor do Escorpião
 	addi $a1, $zero, 11       # c: coluna
@@ -120,7 +126,7 @@
 		sll $t6, $t6, 2
 		add $t6, $t6, $s0
 		
-		for_gL: beq $t0, $a3, EXIT_for_gL
+		for_gL: beq $t0, $a3, EXIT_gerarLago
 			
 			sw $t1, 0($t6)
 			
@@ -128,10 +134,50 @@
 			addi $t0, $t0, 1 # incremento
 			j for_gL
 		
-		EXIT_for_gL:
-			
-		
 	EXIT_gerarLago: jr $31
+
+	gerarCrocodilo:
+		add $s7, $zero, $31   # backup JAL
+		add $t0, $zero, $zero # reseta iterador
+				
+		# &pX = &p0 + (l * L + c) * 4
+		mul $t6, $a2, $s1
+		add $t6, $t6, $a1
+		sll $t6, $t6, 2
+		add $t6, $t6, $s0
+		
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		addi $t6, $t6, 480
+		jal for_gCrc
+		
+		addi $t6 $t6, 468
+		sw $t1, 0($t6)
+		sw $t1, 8($t6)
+		sw $t1, 16($t6)
+		sw $t1, 24($t6)
+		sw $t1, 36($t6)
+		sw $t1, 40($t6)
+		
+		add $t0, $zero, $zero # reseta iterador
+		
+		addi $t6, $t6, 508
+		jal for_gCrc
+		
+		j EXIT_gerarCrocodilo
+		
+		for_gCrc: beq $t0, 12, EXIT_forCrc
+		
+			sw $t1, 0($t6)
+			addi $t6, $t6, 4
+		
+			addi $t0, $t0, 1 # incremento
+			j for_gCrc
+		
+		EXIT_forCrc: jr $31
+	
+	EXIT_gerarCrocodilo: add $31, $zero, $s7 # restaura backup JAL
+		  	     jr $31
 
 	gerarEscorpiao:
 	
