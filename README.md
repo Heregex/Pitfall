@@ -1,4 +1,4 @@
-# Pitfall! (Atari 2600)
+# 🕹️ Pitfall! (Atari 2600)
 
 ## 📋 Descrição
 Este projeto é uma reimplementação do clássico jogo Pitfall! de 1982, para avaliação na disciplina de Arquitetura de Computadores. O projeto foi desenvolvido em linguagem Assembly na arquitetura do processador MIPS e executado no ambiente do simulador MARS.
