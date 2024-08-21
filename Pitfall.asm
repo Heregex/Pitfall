@@ -82,6 +82,15 @@
 	addi $2, $zero, 10
 	syscall
 	
+	# __________ CALCULAR ENDEREÇO PONTO X __________ #
+	calc_endereco_pX: # &pX = &p0 + (l * L + c) * 4
+		mul $t6, $a2, $s1
+		add $t6, $t6, $a1
+		sll $t6, $t6, 2
+		add $t6, $t6, $s0
+		
+		jr $31
+	
 	gerarCenario:
 		
 		for_gC: beq $t0, $a1, EXIT_gerarCenario
@@ -93,16 +102,15 @@
 			
 			j for_gC
 			
-		gerarTronco:
+	EXIT_gerarCenario: jr $31
+
+	gerarTronco:
 			add $t0, $zero, $zero # reseta iterador
-				
-			# &pX = &p0 + (l * L + c) * 4
-			mul $t6, $a2, $s1
-			add $t6, $t6, $a1
-			sll $t6, $t6, 2
-			add $t6, $t6, $s0
 			
-			for_gT: beq $t0, 20, EXIT_gerarCenario # pinta 20 UG de Tronco
+			add $s7, $zero, $31   # backup JAL
+			jal calc_endereco_pX
+			
+			for_gT: beq $t0, 20, EXIT_gerarTronco # pinta 20 UG de Tronco
 				# espessura do tronco: 4 UG
 				sw $t1, 0($t6)
 				sw $t1, 4($t6)
@@ -113,18 +121,16 @@
 				addi $t6, $t6, 512
 				
 				j for_gT
-			
-	EXIT_gerarCenario: jr $31
+				
+	EXIT_gerarTronco: add $31, $zero, $s7 # restaura backup JAL
+			  jr $31
 
 	gerarLago:
 		
 		add $t0, $zero, $zero # reseta iterador
-		
-		# &pX = &p0 + (l * L + c) * 4
-		mul $t6, $a2, $s1
-		add $t6, $t6, $a1
-		sll $t6, $t6, 2
-		add $t6, $t6, $s0
+
+		add $s7, $zero, $31   # backup JAL
+		jal calc_endereco_pX
 		
 		for_gL: beq $t0, $a3, EXIT_gerarLago
 			
@@ -134,22 +140,23 @@
 			addi $t0, $t0, 1 # incremento
 			j for_gL
 		
-	EXIT_gerarLago: jr $31
+	EXIT_gerarLago: add $31, $zero, $s7 # restaura backup JAL
+			jr $31
 
 	gerarCrocodilo:
-		add $s7, $zero, $31   # backup JAL
 		add $t0, $zero, $zero # reseta iterador
-				
-		# &pX = &p0 + (l * L + c) * 4
-		mul $t6, $a2, $s1
-		add $t6, $t6, $a1
-		sll $t6, $t6, 2
-		add $t6, $t6, $s0
+		
+		add $s7, $zero, $31 # backup JAL
+		jal calc_endereco_pX
+		add $31, $zero, $s7 # restaura backup JAL
 		
 		sw $t1, 0($t6)
 		sw $t1, 4($t6)
 		addi $t6, $t6, 480
+		
+		add $s7, $zero, $31 # backup JAL
 		jal for_gCrc
+		add $31, $zero, $s7 # restaura backup JAL
 		
 		addi $t6 $t6, 468
 		sw $t1, 0($t6)
@@ -162,7 +169,10 @@
 		add $t0, $zero, $zero # reseta iterador
 		
 		addi $t6, $t6, 508
+		
+		add $s7, $zero, $31 # backup JAL
 		jal for_gCrc
+		add $31, $zero, $s7 # restaura backup JAL
 		
 		j EXIT_gerarCrocodilo
 		
@@ -176,18 +186,14 @@
 		
 		EXIT_forCrc: jr $31
 	
-	EXIT_gerarCrocodilo: add $31, $zero, $s7 # restaura backup JAL
-		  	     jr $31
+	EXIT_gerarCrocodilo: jr $31
 
 	gerarEscorpiao:
 	
 		add $t0, $zero, $zero # reseta iterador
 				
-		# &pX = &p0 + (l * L + c) * 4
-		mul $t6, $a2, $s1
-		add $t6, $t6, $a1
-		sll $t6, $t6, 2
-		add $t6, $t6, $s0
+		add $s7, $zero, $31   # backup JAL
+		jal calc_endereco_pX
 		
 		sw $t1, 0($t6)
 		sw $t1, 4($t6)
@@ -233,17 +239,15 @@
 		sw $t1, 8($t6)
 		sw $t1, 32($t6)
 		
-	EXIT_gerarEscorpiao: jr $31
+	EXIT_gerarEscorpiao: add $31, $zero, $s7 # restaura backup JAL
+			     jr $31
 
 	gerarPersonagem:
 		
 		add $t6, $zero, $zero # reseta $t6
 		
-		# &pX = &p0 + (l * L + c) * 4
-		mul $t6, $a2, $s1
-		add $t6, $t6, $a1
-		sll $t6, $t6, 2
-		add $t6, $t6, $s0
+		add $s7, $zero, $31   # backup JAL
+		jal calc_endereco_pX
 		
 		HAIR:
 			addi $t1, $zero, 0x646410 # cor do Cabelo
@@ -308,4 +312,5 @@
 				sw $t1, 4($t6)
 				sw $t1, 8($t6)
 		
-	EXIT_gerarPersonagem: jr $31
+	EXIT_gerarPersonagem: add $31, $zero, $s7 # restaura backup JAL
+			      jr $31
