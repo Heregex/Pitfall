@@ -68,15 +68,66 @@
 	jal gerarCrocodilo
 	
 	# __________ ESCORPIÃO __________ #
-	addi $t1, $zero, 0xF4F4F4 # cor do Escorpião
-	addi $a1, $zero, 11       # c: coluna
-	addi $a2, $zero, 55	  # l: linha
-	jal gerarEscorpiao
+	#addi $t1, $zero, 0xF4F4F4 # cor do Escorpião
+	#addi $a1, $zero, 11       # c: coluna
+	#addi $a2, $zero, 55	  # l: linha
+	#jal gerarEscorpiao
 	
 	# __________ PERSONAGEM __________ #
 	addi $a1, $zero, 8  # c: coluna
 	addi $a2, $zero, 24 # l: linha
 	jal gerarPersonagem
+	
+	# CHECKPOINT {
+	addi $t4, $zero, 11 # reseta iterador
+	addi $t2, $zero, 19   # c: coluna
+	addi $t3, $zero, 55   # l: linha
+	
+	addi $t1, $zero, 0xFF0000 # cor do Escorpião
+	add $a1, $zero, $t2       # c: coluna
+	add $a2, $zero, $t3	  # l: linha
+	
+	EXIT_for2: addi $t4, $zero, 11 # reseta iterador
+	
+	for:
+		beq $t4, 100, EXIT_for
+		
+		addi $t1, $zero, 0x000000 # cor do Escorpião
+		jal moveRIGHT_delete
+		
+		addi $a1, $a1, 1 # incrementa c: coluna
+		
+		addi $t1, $zero, 0xF4F4F4 # cor do Escorpião
+		jal moveRIGHT
+		
+		addi $4, $zero, 50
+		addi $2, $zero, 32 # delay
+		syscall
+		
+		addi $t4, $t4, 1 # incremento iterador
+		j for
+	
+	EXIT_for: addi $t4, $zero, 11 # reseta iterador
+	
+	for2:
+
+		beq $t4, 100, EXIT_for2
+		
+		addi $t1, $zero, 0x000000 # cor do Escorpião
+		jal moveRIGHT_delete
+		
+		addi $a1, $a1, -1 # incrementa c: coluna
+		
+		addi $t1, $zero, 0xF4F4F4 # cor do Escorpião
+		jal moveRIGHT
+		
+		addi $4, $zero, 50
+		addi $2, $zero, 32 # delay
+		syscall
+		
+		addi $t4, $t4, 1 # incremento iterador
+		j for2
+	# }
 	
 	# __________ >>> ENDPROGRAM <<< __________ #
 	addi $2, $zero, 10
@@ -314,3 +365,107 @@
 		
 	EXIT_gerarPersonagem: add $31, $zero, $s7 # restaura backup JAL
 			      jr $31
+
+	moveRIGHT:
+				
+		add $s7, $zero, $31   # backup JAL
+		jal calc_endereco_pX
+		
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 8($t6)
+		addi $t6, $t6, 508
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		sw $t1, 20($t6)
+		addi $t6, $t6, 512
+		sw $t1, 0($t6)
+		sw $t1, 20($t6)
+		addi $t6, $t6, 504
+		sw $t1, 0($t6)
+		sw $t1, 12($t6)
+		sw $t1, 28($t6)
+		addi $t6, $t6, 512
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 24($t6)
+		sw $t1, 28($t6)
+		addi $t6, $t6, 520
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 8($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		addi $t6, $t6, 500
+		sw $t1, 0($t6)
+		sw $t1, 8($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		sw $t1, 20($t6)
+		sw $t1, 24($t6)
+		addi $t6, $t6, 516
+		sw $t1, 0($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		sw $t1, 20($t6)
+		addi $t6, $t6, 508
+		sw $t1, 0($t6)
+		sw $t1, 8($t6)
+		sw $t1, 32($t6)
+		
+	EXIT_moveRIGHT: add $31, $zero, $s7 # restaura backup JAL
+			jr $31
+			
+	moveRIGHT_delete:
+	
+		add $s7, $zero, $31   # backup JAL
+		jal calc_endereco_pX
+		
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 8($t6)
+		addi $t6, $t6, 508
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		sw $t1, 20($t6)
+		addi $t6, $t6, 512
+		sw $t1, 0($t6)
+		sw $t1, 20($t6)
+		addi $t6, $t6, 504
+		sw $t1, 0($t6)
+		sw $t1, 12($t6)
+		sw $t1, 28($t6)
+		addi $t6, $t6, 512
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 24($t6)
+		sw $t1, 28($t6)
+		addi $t6, $t6, 520
+		sw $t1, 0($t6)
+		sw $t1, 4($t6)
+		sw $t1, 8($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		addi $t6, $t6, 500
+		sw $t1, 0($t6)
+		sw $t1, 8($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		sw $t1, 20($t6)
+		sw $t1, 24($t6)
+		addi $t6, $t6, 516
+		sw $t1, 0($t6)
+		sw $t1, 12($t6)
+		sw $t1, 16($t6)
+		sw $t1, 20($t6)
+		addi $t6, $t6, 508
+		sw $t1, 0($t6)
+		sw $t1, 8($t6)
+		sw $t1, 32($t6)
+	
+	EXIT_moveRIGHT_delete: add $31, $zero, $s7 # restaura backup JAL
+			       jr $31
