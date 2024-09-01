@@ -20,5 +20,7 @@ Este projeto é uma reimplementação do clássico jogo Pitfall! de 1982, para a
 1. Tools > Bitmap Display;
 2. Defina as configurações de Bitmap;
 3. **Connect to MIPS**
-4. ```F3```
-5. ```F5```
+4. Tools > Keyboard and Display MMIO Simulator;
+5. **Connect to MIPS**
+6. ```F3```
+7. ```F5```
