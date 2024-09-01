@@ -14,7 +14,7 @@ Este projeto é uma reimplementação do clássico jogo Pitfall! de 1982, para a
 
 ## 🤖 Tecnologias Utilizadas
 * **Assembly (arquitetura MIPS)**
-* **Simulador MARS**
+* **Simulador [MARS](https://courses.missouristate.edu/KenVollmar/MARS/download.htm)**
 
 ## ▶ Execução
 1. Tools > Bitmap Display;
