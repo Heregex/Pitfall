@@ -26,6 +26,8 @@ main:
 	addi $fp, $zero, 1     # inicia Escorpiao  em STATE_1
 
 	jal gerarCenario
+	lui $s0, 0x1001     # inicio do endereco de memoria
+	add $k1, $zero, 128 # L: quantidade de UG na linha
 	jal gerarCrocodilo
 	jal iniLocalPersonagem
 	j   Personagem
@@ -61,7 +63,7 @@ main:
 		add $t0, $zero, $zero # reseta iterador
 
 		# &pX = &p0 + (l * L + c) * 4
-		mul $t6, $a2, $s1
+		mul $t6, $a2, $k1
 		add $t6, $t6, $a1
 		sll $t6, $t6, 2
 		add $t6, $t6, $s0
@@ -175,11 +177,17 @@ main:
 	
 		 key_A: # ESQUERDA
 		 	jal gerarCenario
+		 	lui $s0, 0x1001     # inicio do endereco de memoria
+			add $k1, $zero, 128 # L: quantidade de UG na linha
+		 	jal gerarCrocodilo
 		 	addi $s1, $s1, -12 # -12 bytes de deslocamento
 		 	j switchSTATE
 		 	
 		 key_D: # DIREITA
 		 	jal gerarCenario
+		 	lui $s0, 0x1001     # inicio do endereco de memoria
+			add $k1, $zero, 128 # L: quantidade de UG na linha
+		 	jal gerarCrocodilo
 		 	addi $s1, $s1, 12 # +12 bytes de deslocamento
 		 	j switchSTATE
 		 	
